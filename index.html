@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Solicitação de Lanches — Setor Itaquá / Ferraz</title>
+<style>
+  :root{
+    --terra:#B85042; --terra-dark:#7E332A; --sand:#E7E8D1; --sage:#A7BEAE;
+    --ink:#2B2B2B; --muted:#6E6660; --paper:#FCFBF7; --bg:#F2F1E8;
+    --serif:Georgia,"Times New Roman",serif;
+    --sans:"Helvetica Neue",Helvetica,Arial,sans-serif;
+    --mono:"Courier New",Courier,monospace;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);
+       padding:20px 16px 40px;-webkit-text-size-adjust:100%}
+  .wrap{max-width:1080px;margin:0 auto}
+  .eyebrow{font-size:11px;letter-spacing:.09em;color:var(--muted);
+           text-transform:uppercase;font-weight:700}
+  header .eyebrow{color:var(--terra);margin-bottom:4px}
+  h1{font-family:var(--serif);font-size:34px;color:var(--terra-dark);margin:0;line-height:1.1}
+  header p{margin:8px 0 0;font-size:15px;color:var(--muted);max-width:620px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));
+        gap:22px;align-items:start;margin-top:22px}
+  .card{background:#fff;border:1px solid var(--sand);border-radius:8px;padding:22px}
+  .card h2{font-family:var(--serif);font-size:20px;margin:0 0 18px;color:var(--terra-dark)}
+  .field{margin-bottom:14px}
+  .row{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+  .row > div{flex:1 1 140px}
+  input,select{width:100%;padding:10px 12px;margin-top:6px;font-family:var(--sans);
+    font-size:15px;color:var(--ink);background:#fff;border:1px solid var(--sage);
+    border-radius:4px;outline:none}
+  input:focus,select:focus{border-color:var(--terra);box-shadow:0 0 0 2px rgba(184,80,66,.18)}
+  button{font-family:var(--sans);cursor:pointer;border-radius:4px}
+  button:focus-visible{outline:2px solid var(--terra);outline-offset:2px}
+  .btn-main{flex:1;padding:12px 18px;background:var(--terra);color:#fff;border:none;
+            font-size:15px;font-weight:700}
+  .btn-alt{padding:12px 18px;background:transparent;color:var(--muted);
+           border:1px solid var(--sage);font-size:15px}
+  .polo-box{background:var(--sand);border-radius:6px;padding:12px 14px;margin-bottom:14px}
+  .polo-box .nome{font-family:var(--serif);font-size:18px;color:var(--terra-dark);font-weight:700}
+  .polo-box .end{font-size:13px;color:var(--muted);margin-top:2px}
+  .erro{background:#FBEAE7;color:var(--terra-dark);border:1px solid var(--terra);
+        border-radius:4px;padding:9px 12px;font-size:13px;margin-bottom:14px}
+  .vazio{border:1px dashed var(--sage);border-radius:8px;padding:48px 24px;
+         text-align:center;color:var(--muted);background:#FAFAF4}
+  .vazio .t{font-family:var(--serif);font-size:19px;color:var(--terra-dark);margin-bottom:6px}
+  .ordem{background:var(--paper);border-radius:0 0 6px 6px;
+         box-shadow:0 1px 6px rgba(0,0,0,.10);overflow:hidden}
+  .serrilha{height:12px;background:radial-gradient(circle at 6px 0,transparent 6px,var(--paper) 6.5px);
+            background-size:12px 12px;background-color:var(--bg)}
+  .corpo{padding:18px 22px 24px;font-family:var(--mono);font-size:13px}
+  .topo{display:flex;justify-content:space-between;align-items:flex-start;
+        border-bottom:2px solid var(--ink);padding-bottom:10px;gap:12px}
+  .topo .tit{font-family:var(--serif);font-size:19px;font-weight:700;color:var(--terra-dark)}
+  .topo .sub{font-size:12px;color:var(--muted);margin-top:2px}
+  .topo .num{font-size:16px;font-weight:700;text-align:right}
+  .via{display:inline-block;margin-top:4px;background:var(--sage);color:#1F3D33;
+       padding:2px 8px;border-radius:3px;font-size:11px;font-weight:700}
+  table{width:100%;border-collapse:collapse}
+  .dados td{padding:3px 0;vertical-align:top}
+  .dados td.k{padding-right:10px;color:var(--muted);white-space:nowrap;font-size:11px}
+  .dados td.v{font-weight:700}
+  .stats{margin-top:16px;background:var(--sand);border-radius:4px;padding:10px 12px;
+         display:flex;gap:20px;flex-wrap:wrap}
+  .stats .lab{font-size:10px;color:var(--muted)}
+  .stats .val{font-size:22px;font-weight:700;color:var(--terra-dark)}
+  .stats .obs{flex:1;min-width:140px;align-self:center;font-size:11px;
+              color:var(--muted);line-height:1.4}
+  .secao{margin-top:16px;font-size:11px;color:var(--muted);letter-spacing:.08em}
+  .itens{margin-top:6px}
+  .itens th{text-align:right;padding:5px 0;font-size:11px;color:var(--muted);font-weight:400}
+  .itens th:first-child{text-align:left}
+  .itens thead tr{border-bottom:1px solid var(--sage)}
+  .itens td{padding:6px 0;text-align:right}
+  .itens td:first-child{text-align:left}
+  .itens td:nth-child(2){color:var(--muted)}
+  .itens td:last-child{font-weight:700}
+  .itens tbody tr{border-bottom:1px dotted var(--sage)}
+  .assin{margin-top:20px;display:flex;gap:24px;flex-wrap:wrap}
+  .assin > div{flex:1 1 150px}
+  .assin .linha{border-bottom:1px solid var(--ink);height:26px}
+  .assin .lab{font-size:10px;color:var(--muted);margin-top:3px}
+  .hist{margin-top:18px}
+  .hist button{display:block;width:100%;text-align:left;background:#fff;
+    border:1px solid var(--sand);padding:9px 12px;margin-bottom:6px;
+    font-size:13px;color:var(--ink)}
+  .hist button.ativo{background:var(--sand)}
+  .hist .id{font-family:var(--mono);font-weight:700;color:var(--terra-dark)}
+  .rodape{margin-top:26px;font-size:12px;color:var(--muted);font-style:italic}
+  .acoes{display:flex;gap:10px}
+  @media print{
+    body{background:#fff;padding:0}
+    .card,.hist,.rodape,header p,.acoes{display:none}
+    .ordem{box-shadow:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header>
+    <div class="eyebrow">Setor Itaquá / Ferraz de Vasconcelos</div>
+    <h1>Solicitação de lanches</h1>
+    <p>Informe o evento e a casa de oração. O sistema identifica a cozinha polo responsável e emite a ordem de produção.</p>
+  </header>
+
+  <div class="grid">
+    <section class="card">
+      <h2>Dados da solicitação</h2>
+
+      <div class="field">
+        <div class="eyebrow">Evento</div>
+        <select id="evento"></select>
+      </div>
+
+      <div class="row">
+        <div>
+          <div class="eyebrow">Data</div>
+          <input type="date" id="data">
+        </div>
+        <div>
+          <div class="eyebrow">Término</div>
+          <input type="time" id="termino" value="21:00">
+        </div>
+      </div>
+
+      <div class="field">
+        <div class="eyebrow">Casa de oração</div>
+        <select id="casa"></select>
+      </div>
+
+      <div id="poloBox"></div>
+
+      <div class="row">
+        <div>
+          <div class="eyebrow">Previsão de pessoas</div>
+          <input type="number" min="1" id="pessoas" placeholder="ex. 120">
+        </div>
+        <div>
+          <div class="eyebrow">Solicitante</div>
+          <input type="text" id="solicitante" placeholder="nome do encarregado">
+        </div>
+      </div>
+
+      <div id="erro"></div>
+
+      <div class="acoes">
+        <button class="btn-main" id="btnEmitir">Emitir ordem</button>
+        <button class="btn-alt" id="btnLimpar">Limpar</button>
+      </div>
+    </section>
+
+    <section>
+      <div id="saida"></div>
+      <div class="hist" id="hist"></div>
+    </section>
+  </div>
+
+  <p class="rodape">Demonstração. Cardápio e margem são exemplos e devem ser definidos pela coordenação do setor.</p>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var POLOS = {
+    P1:{nome:"Centro Itaquá",sede:"Central de Itaquaquecetuba",end:"R. MMDC, 39 — Centro"},
+    P2:{nome:"Norte Itaquá",sede:"Parque Village",end:"Estr. do Cuiabá, 1625"},
+    P3:{nome:"Leste Itaquá",sede:"Jardim São Paulo",end:"R. Ferlópolis, 5"},
+    P4:{nome:"Norte Ferraz",sede:"Central de Ferraz",end:"R. das Américas, 139"},
+    P5:{nome:"Sul Ferraz",sede:"Parque São Francisco",end:"Av. Rosa Teixeira Bueno, 920"}
+  };
+
+  var CASAS = [
+    {n:"Central de Itaquaquecetuba",p:"P1"},{n:"Jardim Paineira",p:"P1"},
+    {n:"Vila São Carlos",p:"P1"},{n:"Vila Virgínia",p:"P1"},{n:"Aracaré",p:"P1"},
+    {n:"Parque Village",p:"P2"},{n:"Jardim Mônica",p:"P2"},
+    {n:"Jardim São Paulo",p:"P3"},{n:"Vila Augusta",p:"P3"},{n:"Parque Recanto Mônica",p:"P3"},
+    {n:"Central de Ferraz",p:"P4"},{n:"Jardim Débora",p:"P4"},
+    {n:"Jardim São João",p:"P4"},{n:"Jardim Bandeirantes",p:"P4"},
+    {n:"Parque São Francisco",p:"P5"},{n:"Jardim Alexandre",p:"P5"},
+    {n:"Vila Santo Antônio",p:"P5"},{n:"Vila Cristina",p:"P5"},
+    {n:"Cambiri",p:"P5"},{n:"Sítio Paiolzinho",p:"P5"}
+  ];
+
+  var EVENTOS = ["Ensaio local","Ensaio regional","Reunião de jovens e menores","Culto oficial"];
+
+  var CARDAPIO = [
+    {item:"Pão francês",qtd:1,un:"un"},
+    {item:"Queijo mussarela",qtd:30,un:"g"},
+    {item:"Presunto",qtd:30,un:"g"},
+    {item:"Suco de uva integral",qtd:200,un:"ml"},
+    {item:"Fruta da estação",qtd:1,un:"un"}
+  ];
+
+  var MARGEM = 0.10;
+  var ordens = [];
+  var atualId = null;
+
+  var $ = function(id){ return document.getElementById(id); };
+
+  function esc(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+    });
+  }
+
+  function dataBR(iso){
+    if(!iso) return "—";
+    var p = iso.split("-");
+    return p[2] + "/" + p[1] + "/" + p[0];
+  }
+
+  function menos30(hhmm){
+    if(!hhmm) return "—";
+    var p = hhmm.split(":");
+    var t = (Number(p[0])*60 + Number(p[1]) - 30 + 1440) % 1440;
+    var hh = String(Math.floor(t/60));
+    var mm = String(t%60);
+    return (hh.length<2?"0"+hh:hh) + ":" + (mm.length<2?"0"+mm:mm);
+  }
+
+  function num(v){ return Math.ceil(v).toLocaleString("pt-BR"); }
+
+  // ---- popular selects ----
+  var selEvento = $("evento");
+  EVENTOS.forEach(function(e){
+    var o = document.createElement("option");
+    o.textContent = e; selEvento.appendChild(o);
+  });
+
+  var selCasa = $("casa");
+  var op0 = document.createElement("option");
+  op0.value = ""; op0.textContent = "Selecione a localidade";
+  selCasa.appendChild(op0);
+  Object.keys(POLOS).forEach(function(pid){
+    var g = document.createElement("optgroup");
+    g.label = POLOS[pid].nome;
+    CASAS.filter(function(c){ return c.p === pid; }).forEach(function(c){
+      var o = document.createElement("option");
+      o.value = c.n; o.textContent = c.n;
+      g.appendChild(o);
+    });
+    selCasa.appendChild(g);
+  });
+
+  function poloDe(nomeCasa){
+    var c = CASAS.filter(function(x){ return x.n === nomeCasa; })[0];
+    if(!c) return null;
+    var p = POLOS[c.p];
+    return {id:c.p, nome:p.nome, sede:p.sede, end:p.end};
+  }
+
+  function renderPolo(){
+    var p = poloDe(selCasa.value);
+    $("poloBox").innerHTML = p ? (
+      '<div class="polo-box">' +
+        '<div class="eyebrow" style="color:var(--terra-dark);margin-bottom:3px">Cozinha polo responsável</div>' +
+        '<div class="nome">' + esc(p.nome) + '</div>' +
+        '<div class="end">' + esc(p.sede) + ' · ' + esc(p.end) + '</div>' +
+      '</div>'
+    ) : "";
+  }
+  selCasa.addEventListener("change", renderPolo);
+
+  function emitir(){
+    var data = $("data").value;
+    var casa = selCasa.value;
+    var pessoas = Number($("pessoas").value);
+
+    if(!data || !casa || !pessoas || pessoas < 1){
+      $("erro").innerHTML = '<div class="erro">Preencha data, casa de oração e previsão de participantes.</div>';
+      return;
+    }
+    $("erro").innerHTML = "";
+
+    var termino = $("termino").value || "21:00";
+    var total = Math.ceil(pessoas * (1 + MARGEM));
+    var solic = $("solicitante").value.trim() || "não informado";
+    var ano = data.split("-")[0];
+
+    var ordem = {
+      id: "OP-" + ano + "-" + ("0000" + (ordens.length + 1)).slice(-4),
+      evento: selEvento.value,
+      data: data, termino: termino, entrega: menos30(termino),
+      casa: casa, polo: poloDe(casa),
+      pessoas: pessoas, total: total, solicitante: solic,
+      itens: CARDAPIO.map(function(c){
+        return {item:c.item, qtd:c.qtd, un:c.un, totalQtd:c.qtd*total};
+      }),
+      emitidaEm: new Date().toLocaleString("pt-BR",{dateStyle:"short",timeStyle:"short"})
+    };
+
+    ordens.unshift(ordem);
+    atualId = ordem.id;
+    render();
+  }
+
+  function limpar(){
+    selCasa.value = ""; $("pessoas").value = ""; $("data").value = "";
+    $("solicitante").value = ""; $("erro").innerHTML = "";
+    atualId = null;
+    renderPolo(); render();
+  }
+
+  function render(){
+    var o = ordens.filter(function(x){ return x.id === atualId; })[0];
+
+    if(!o){
+      $("saida").innerHTML =
+        '<div class="vazio"><div class="t">Nenhuma ordem emitida</div>' +
+        '<div>Preencha os dados ao lado para gerar a ordem de produção.</div></div>';
+    } else {
+      var linhas = [
+        ["POLO", o.polo.nome + " — " + o.polo.sede],
+        ["ENTREGAR EM", o.casa],
+        ["EVENTO", o.evento],
+        ["DATA", dataBR(o.data) + " · término " + o.termino],
+        ["ENTREGA ATÉ", o.entrega + " (30 min antes do término)"],
+        ["SOLICITANTE", o.solicitante]
+      ].map(function(l){
+        return '<tr><td class="k">' + esc(l[0]) + '</td><td class="v">' + esc(l[1]) + '</td></tr>';
+      }).join("");
+
+      var itens = o.itens.map(function(i){
+        return '<tr><td>' + esc(i.item) + '</td><td>' + i.qtd + ' ' + i.un +
+               '</td><td>' + num(i.totalQtd) + ' ' + i.un + '</td></tr>';
+      }).join("");
+
+      $("saida").innerHTML =
+      '<div class="ordem"><div class="serrilha"></div><div class="corpo">' +
+        '<div class="topo"><div>' +
+          '<div class="tit">ORDEM DE PRODUÇÃO</div>' +
+          '<div class="sub">Emitida em ' + esc(o.emitidaEm) + '</div>' +
+        '</div><div><div class="num">' + esc(o.id) + '</div>' +
+        '<div class="via">VIA COZINHA POLO</div></div></div>' +
+        '<table class="dados"><tbody>' + linhas + '</tbody></table>' +
+        '<div class="stats">' +
+          '<div><div class="lab">PREVISÃO</div><div class="val">' + o.pessoas + '</div></div>' +
+          '<div><div class="lab">PRODUZIR (+10%)</div><div class="val">' + o.total + '</div></div>' +
+          '<div class="obs">Margem de 10% aplicada sobre a previsão informada pela casa de oração.</div>' +
+        '</div>' +
+        '<div class="secao">INSUMOS A PREPARAR</div>' +
+        '<table class="itens"><thead><tr><th>Item</th><th>Por pessoa</th><th>Total</th></tr></thead>' +
+        '<tbody>' + itens + '</tbody></table>' +
+        '<div class="assin">' +
+          '<div><div class="linha"></div><div class="lab">Conferência do preparo</div></div>' +
+          '<div><div class="linha"></div><div class="lab">Recebimento na casa</div></div>' +
+        '</div>' +
+      '</div></div>';
+    }
+
+    if(ordens.length > 1){
+      $("hist").innerHTML = '<div class="eyebrow" style="margin-bottom:8px">Ordens emitidas nesta sessão</div>' +
+        ordens.map(function(x){
+          return '<button data-id="' + esc(x.id) + '" class="' + (x.id === atualId ? "ativo" : "") + '">' +
+            '<span class="id">' + esc(x.id) + '</span>&nbsp; ' + esc(x.casa) +
+            ' · ' + dataBR(x.data) + ' · ' + x.total + ' porções</button>';
+        }).join("");
+      Array.prototype.forEach.call($("hist").querySelectorAll("button"), function(b){
+        b.addEventListener("click", function(){ atualId = b.getAttribute("data-id"); render(); });
+      });
+    } else {
+      $("hist").innerHTML = "";
+    }
+  }
+
+  $("btnEmitir").addEventListener("click", emitir);
+  $("btnLimpar").addEventListener("click", limpar);
+  render();
+})();
+</script>
+</body>
+</html>
